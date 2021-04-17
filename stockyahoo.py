@@ -25,11 +25,12 @@ def load_data(ticker,interval = 'ytd'):
 
 def plot_raw_data(data):
     d = data
-    fig = 0
-    del fig
+    # fig = 0
+    # del fig
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=d['Date'], y=d['Open'], name="stock_open"))
     fig.add_trace(go.Scatter(x=d['Date'], y=d['Close'], name="stock_close"))
+    fig.
     # fig.add_trace(go.Scatter(x=data['Date'], y=data['Volume'], name="Volume"))
     # fig.layout.update(title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
     st.plotly_chart(fig)
