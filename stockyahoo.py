@@ -29,9 +29,9 @@ class Stock():
         self.ticker = yf.Ticker(selected_stock)
         self.stockData = self.load_data(self.ticker)
 
-    def load_data(self, ticker,interval = 'ytd'):
+    def load_data(self, ticker,inter = '1y'):
         # print(interval)
-        data = ticker.history(period=interval)
+        data = ticker.history(period=inter, interval='1d')
         data.reset_index(inplace=True)
         return data
         
@@ -41,10 +41,14 @@ class Stock():
     def graph(self):
         #, date_col = stockData['Date'], open_col = stockData['Open']):
         # args = [date_col, open_col]
-        g = 0
-        del g
+        # g = 0
+        # del g
         g = Graph()
         g.plot_raw_data(self.stockData)
+        if(st.button("1y") == True):
+            inter='1y'
+            data = self.load_data(self.ticker, inter)
+            g.plot_raw_data(data)
         if(st.button("1mo") == True):
             inter='1mo'
             data = self.load_data(self.ticker, inter)
@@ -77,10 +81,11 @@ class Graph():
         d = data
         # fig = 0
         # del fig
-        # fig = go.Figure()
         #scatter object class has list of all traces
-        self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['Open'], name="stock_open"))
-        self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['Close'], name="stock_close"))
+        self.figure_bettername = go.Figure(go.Ohlc(x=d['Date'], open=d['Open'], high=d['High'], low=d['Low'], close=d['Close']))
+        # self.figure_bettername.add_trace()
+        # self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['High'], name="stock_high"))
+        # self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['Low'], name="stock_low"))
         # self.figure_bettername.update_xaxes(rangeslider_range=d['Date'])
         # fig.del()
         # fig.add_trace(go.Scatter(x=data['Date'], y=data['Volume'], name="Volume"))
