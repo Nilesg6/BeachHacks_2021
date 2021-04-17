@@ -19,13 +19,6 @@ from plotly import graph_objs as go
 #ticker
 #data
 
-#seperate
-#graph
-    #period
-    #ticker
-    #axes
-    #header
-    #
 
 class Stock():
 
@@ -33,8 +26,8 @@ class Stock():
     stockData = []
 
     def __init__(self, selected_stock):
-        ticker = yf.Ticker(selected_stock)
-        self.stockData = self.load_data(ticker)
+        self.ticker = yf.Ticker(selected_stock)
+        self.stockData = self.load_data(self.ticker)
 
     def load_data(self, ticker,interval = 'ytd'):
         # print(interval)
@@ -45,22 +38,60 @@ class Stock():
     def getStockData(self):
         return self.stockData
 
-# class Graph():
-    
-#     def 
+    def graph(self):
+        #, date_col = stockData['Date'], open_col = stockData['Open']):
+        # args = [date_col, open_col]
+        g = 0
+        del g
+        g = Graph()
+        g.plot_raw_data(self.stockData)
+        if(st.button("1mo") == True):
+            inter='1mo'
+            data = self.load_data(self.ticker, inter)
+            g.plot_raw_data(data)
+        if(st.button("1d") == True):
+            inter='1d'
+            data = self.load_data(self.ticker, inter)
+            g.plot_raw_data(data)
 
-    # def plot_raw_data(data):
+#seperate
+#graph
+    #period
+    #ticker
+    #axes
+    #header
+    #
+class Graph():
+
+    figure_bettername = go.Figure()
+    
+    def __init__(self): #, args):
+        self.figure_bettername = go.Figure()
+        self.chartplot = st.empty()
+        # self.period = args[0]
+        # self.ticker = args[1]
+        # self.axes = args[2]
+        # self.header = args[3]
+
+    def plot_raw_data(self, data):
+        d = data
+        # fig = 0
+        # del fig
+        # fig = go.Figure()
+        #scatter object class has list of all traces
+        self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['Open'], name="stock_open"))
+        self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['Close'], name="stock_close"))
+        # self.figure_bettername.update_xaxes(rangeslider_range=d['Date'])
+        # fig.del()
+        # fig.add_trace(go.Scatter(x=data['Date'], y=data['Volume'], name="Volume"))
+        # fig.layout.update(title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
+
+        self.chartplot.empty()
+        self.chartplot = st.plotly_chart(self.figure_bettername)
+
+    # def update_fig(self, data):
     #     d = data
-    #     # fig = 0
-    #     # del fig
-    #     fig = go.Figure()
-    #     #scatter object class has list of all traces
-    #     fig.add_trace(go.Scatter(x=d['Date'], y=d['Open'], name="stock_open"))
-    #     fig.add_trace(go.Scatter(x=d['Date'], y=d['Close'], name="stock_close"))
-    #     fig.del()
-    #     # fig.add_trace(go.Scatter(x=data['Date'], y=data['Volume'], name="Volume"))
-    #     # fig.layout.update(title_text='Time Series data with Rangeslider', xaxis_rangeslider_visible=True)
-    #     st.plotly_chart(fig)
+    #     self.figure_bettername.update_traces(overwrite=True)
 
 # data_load_state = st.text('Loading data...')
 # if(selected_stock != ""):

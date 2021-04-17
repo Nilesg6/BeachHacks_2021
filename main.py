@@ -11,18 +11,18 @@ from stockyahoo import Stock
 
 
 
-
 st.title('Stock App')
 selected_stock = st.text_input("Enter ticker:").upper()
 
 mainStock = Stock(selected_stock)
 sD = mainStock.getStockData()
 
+mainStock.graph()
+
 print(sD)
 
+
 # inter = st.text_input("Enter time:").upper()
-
-
 
 # ticker = yf.Ticker(selected_stock)
 
