@@ -46,7 +46,7 @@ class Trade():
                 print(self.portfolio)
 
         
-    def sell(self, ticker, date, shares):
+    def sell(self, tickers, date, shares):
         data = yf.download(tickers, start = date)
         self.stockData = data
         # print(data)
