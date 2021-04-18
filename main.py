@@ -9,21 +9,37 @@ import yfinance as yf
 from plotly import graph_objs as go
 from stockyahoo import Stock
 
+def run():
+    options = ["Stock Look Up", "Calculator"]
+    choice = st.sidebar.selectbox("choose", options)
+    if(choice == options[0]):
+        stockLookUp()
+    else:
+        calculator()
+
+def calculator():
+    startDate = st.date_input("Enter Start Date", min_value = (datetime.datetime.now() - datetime.timedelta(days=1*365)), max_value = date.today())
+    endDate = st.date_input("Enter End Date", min_value = (datetime.datetime.now() - datetime.timedelta(days=1*365)), max_value = date.today()) 
+
+    
+
+def stockLookUp():
+    st.title('Stock App')
+    selected_stock = st.text_input("Enter ticker:").upper()
+
+    time = ["1d", "5d", "1mo", "ytd", "1y"]
 
 
-st.title('Stock App')
-selected_stock = st.text_input("Enter ticker:").upper()
+    timePeriod = st.selectbox("Choose a demo", time, 4)
+    print(timePeriod)
 
-time = ["1d", "5d", "1mo", "ytd", "1y"]
+    mainStock = Stock(selected_stock, timePeriod)
+    sD = mainStock.getStockData()
+
+    mainStock.graph()
 
 
-timePeriod = st.selectbox("Choose a demo", time, 4)
-print(timePeriod)
-
-mainStock = Stock(selected_stock, timePeriod)
-sD = mainStock.getStockData()
-
-mainStock.graph()
+run()
 
 # if(sD != []):
 # print(sD)
