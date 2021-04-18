@@ -95,7 +95,7 @@ def calculator():
     st.title('Calculator')
 
     selected_stock = st.text_input("Enter ticker:", "GME").upper()
-    share_amount = st.text_input("Enter share amount:", 1)
+    share_amount = st.text_input("Enter share amount:", 0)
     startDate = st.date_input("Enter Start Date", value = date.today() - datetime.timedelta(days=1), max_value = date.today() - datetime.timedelta(days=1))
     limit = startDate + datetime.timedelta(days=365)
     if limit >= date.today():
