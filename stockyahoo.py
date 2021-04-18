@@ -48,7 +48,7 @@ class Trade():
                 print(" wal", self.wallet)
                 print(" wor", self.worth)
                 st.subheader("Purchase Complete!")
-                st.write("Wallet =", self.wallet)
+                st.write("Wallet =", round(self.wallet, 2))
                 st.write("Portfolio Worth =", self.worth)
                 return self.portfolio
             st.write("Insufficient Funds")
