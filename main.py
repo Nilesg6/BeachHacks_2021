@@ -14,12 +14,19 @@ from stockyahoo import Stock
 st.title('Stock App')
 selected_stock = st.text_input("Enter ticker:").upper()
 
-mainStock = Stock(selected_stock)
+time = ["1d", "5d", "1mo", "ytd", "1y"]
+
+
+timePeriod = st.selectbox("Choose a demo", time, 4)
+print(timePeriod)
+
+mainStock = Stock(selected_stock, timePeriod)
 sD = mainStock.getStockData()
 
 mainStock.graph()
 
-print(sD)
+# if(sD != []):
+# print(sD)
 
 
 # inter = st.text_input("Enter time:").upper()

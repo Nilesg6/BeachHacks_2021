@@ -24,14 +24,20 @@ class Stock():
 
     ticker = []
     stockData = []
+    period = ""
 
-    def __init__(self, selected_stock):
+    def __init__(self, selected_stock, period):
         self.ticker = yf.Ticker(selected_stock)
-        self.stockData = self.load_data(self.ticker)
+        self.period = period
+        self.stockData = self.load_data(self.ticker, self.period )
+        
 
-    def load_data(self, ticker,inter = '1y'):
-        # print(interval)
-        data = ticker.history(period=inter, interval='1d')
+    def load_data(self, ticker, period, interval = '1d'):
+        if(period == '1d'):
+            interval = '15m'
+        data = ticker.history(period, interval)
+        # print(data[0])
+        # data = ticker.history("1d", "1m")
         data.reset_index(inplace=True)
         return data
         
@@ -45,18 +51,7 @@ class Stock():
         # del g
         g = Graph()
         g.plot_raw_data(self.stockData)
-        if(st.button("1y") == True):
-            inter='1y'
-            data = self.load_data(self.ticker, inter)
-            g.plot_raw_data(data)
-        if(st.button("1mo") == True):
-            inter='1mo'
-            data = self.load_data(self.ticker, inter)
-            g.plot_raw_data(data)
-        if(st.button("1d") == True):
-            inter='1d'
-            data = self.load_data(self.ticker, inter)
-            g.plot_raw_data(data)
+
 
 #seperate
 #graph
@@ -79,10 +74,16 @@ class Graph():
 
     def plot_raw_data(self, data):
         d = data
+        xVar = 'Date'
+        if('Datetime' in d):
+            xVar = 'Datetime'
         # fig = 0
         # del fig
         #scatter object class has list of all traces
-        self.figure_bettername = go.Figure(go.Ohlc(x=d['Date'], open=d['Open'], high=d['High'], low=d['Low'], close=d['Close']))
+        # self.figure_bettername = go.Figure(go.Ohlc(x=d['Datetime'], open=d['Open'], high=d['High'], low=d['Low'], close=d['Close']))
+        
+        self.figure_bettername = go.Figure(go.Ohlc(x=d[xVar], open=d['Open'], high=d['High'], low=d['Low'], close=d['Close']))
+       
         # self.figure_bettername.add_trace()
         # self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['High'], name="stock_high"))
         # self.figure_bettername.add_trace(go.Scatter(x=d['Date'], y=d['Low'], name="stock_low"))
@@ -93,6 +94,8 @@ class Graph():
 
         self.chartplot.empty()
         self.chartplot = st.plotly_chart(self.figure_bettername)
+
+    
 
     # def update_fig(self, data):
     #     d = data
