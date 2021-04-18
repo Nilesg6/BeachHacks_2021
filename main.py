@@ -136,6 +136,7 @@ def calculator():
     gain = Stock(selected_stock, startDate=startDate, endDate=endDate)
     calc = gain.calculateCapitalGain(share_amount)
     st.write('<p class="font-size">Capital Gain for ', share_amount, 'shares in ', selected_stock, ': $', str(calc), '</p>', unsafe_allow_html=True)
+    st.subheader("OHLC Graph:\nThe OHLC graph displays the high, low, closing, and opening prices of a stock in a period of time. Each line represents the statistics for each 15 minutes for 1 day tracking or individual day in the period of time.")
     gain.graph()
     # st.text()
 
