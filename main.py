@@ -4,18 +4,62 @@ import datetime
 from datetime import date
 # import wikipedia
 import yfinance as yf
+import pandas as pd
 # from fbprophet import Prophet
 # from fbprophet.plot import plot_plotly
 from plotly import graph_objs as go
 from stockyahoo import Stock
 
 def run():
-    options = ["Stock Look Up", "Calculator"]
-    choice = st.sidebar.selectbox("choose", options, 1)
-    if(choice == options[0]):
+    options = ["Stock Look Up", "Calculator", "Paper Trade"]
+    choice = st.sidebar.selectbox("choose", options, 2)
+    if choice == options[0]:
         stockLookUp()
-    else:
+    if choice == options[1]:
         calculator()
+    if choice == options[2]:
+        paperTrade()
+
+def paperTrade():
+    st.title('Paper Trade')
+
+    wallet = 0
+    st.text_input("Enter wallet amount ($):", 0)
+
+    portfolio = [['2020-09-01', 'GME', 1000], ['2021-04-01', 'GME', 100]]
+    portfolio.append(['XXXX-XX-XX', 'GME', 10])
+
+    selected_stock = st.text_input("Enter ticker:", "GME").upper()
+    lookupDate = st.date_input("Enter Buy Date", value = date.today(), max_value = date.today())
+    # lookupDate = st.date_input("Enter Sell Date", value = date.today(), max_value = date.today())
+    
+    # if st.button("Open") == True:
+    #     price = dummy_stock.getOpenPrice()
+    # elif st.button("Close") == True:
+
+
+    dummy_stock = Stock(selected_stock, endDate=lookupDate)
+    stock1 = Stock(selected_stock, endDate=lookupDate)
+    stock2 = Stock(selected_stock, endDate=lookupDate)
+
+    price = dummy_stock.getClosePrice()
+    stage = price * shares
+
+    trader = Trade()
+
+    if stage <= wallet:
+        portfolio.add(trader.buy(stock1))
+        portfolio.remove(trader.sell(stock1))
+
+
+    st.header("Portfolio")
+
+    st.dataframe(pd.DataFrame(portfolio, columns={
+        "date": portfolio[:0],
+        "ticker": portfolio[:1],
+        "shares": portfolio[:2]
+    }))
+
 
 def calculator():
     st.title('Calculator')
@@ -48,6 +92,7 @@ def calculator():
                 </style>
                 """, unsafe_allow_html=True)
 
+    # NOTE: print out start and end price
     gain = Stock(selected_stock, startDate=startDate, endDate=endDate)
     calc = gain.calculateCapitalGain(share_amount)
     st.write('<p class="font-size">Capital Gain for ', share_amount, 'shares in ', selected_stock, ': $', str(calc), '</p>', unsafe_allow_html=True)
@@ -66,7 +111,7 @@ def stockLookUp():
     time = ["1d", "5d", "1mo", "ytd", "1y"]
 
 
-    timePeriod = st.selectbox("Choose a demo", time, 4)
+    timePeriod = st.selectbox("Choose time period", time, 4)
     print(timePeriod)
 
     mainStock = Stock(selected_stock, timePeriod)
