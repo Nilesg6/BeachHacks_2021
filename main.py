@@ -15,7 +15,7 @@ from stockyahoo import Trade
 
 def run():
     options = ["Home","Stock Look Up", "Calculator", "Paper Trade"]
-    choice = st.sidebar.selectbox("Choose Page", options, 0)
+    choice = st.sidebar.selectbox("Choose Page", options, 3)
     if choice == options[0]:
         home()
     if choice == options[1]:
@@ -29,9 +29,9 @@ def paperTrade():
     st.title('Paper Trade')
 
     # wallet = 0
-    # wallet = st.text_input("Enter wallet amount ($):", 1000)
-    investments = Trade()
-    stock_amount = int(st.text_input("Enter amount of stocks:", 3))
+    wallet = int(st.text_input("Enter wallet amount ($):", 1000))
+    investments = Trade(wallet=wallet)
+    stock_amount = int(st.text_input("Enter amount of stocks:", 2))
     portfolio = {}
     while stock_amount:
         stock_amount-=1
@@ -39,11 +39,24 @@ def paperTrade():
         share_amount = st.text_input("Enter share amount:", key=stock_amount)
         portfolio[select_stock] = share_amount
         # stock_list = investments.updatePortfolio(st.text_input("Enter ticker:", key=stock_amount).upper(), 2)
-    print(portfolio)
-    lookupDate = st.date_input("Enter Buy Date", value = date.today(), max_value = date.today())
-    if st.button("Buy") == True:
-        investments.buy(list(portfolio.keys()), lookupDate, list(portfolio.values()))
-    investments.graph()
+    
+    beginTrade = st.date_input("Enter Buy Date", value = date.today() - datetime.timedelta(days=1), max_value = date.today() - datetime.timedelta(days=1))
+    # Repetitive Code
+    limit = beginTrade + datetime.timedelta(days=365)
+    if limit >= date.today():
+        limit = date.today()
+    endTrade = st.date_input("Enter Sell Date", value = date.today(), min_value = beginTrade + datetime.timedelta(days=1), max_value = limit)
+    
+    tempPortfolio = {}
+    if st.button("Activate") == True:
+        tempPortfolio = investments.buy(list(portfolio.keys()), beginTrade, list(portfolio.values()))
+        if tempPortfolio is None:
+            st.write("Inadequate Information")
+            st.write("Try a different date")
+            return
+        investments.sell(list(tempPortfolio.keys()), endTrade, list(tempPortfolio.values()))
+        # investments.graph()
+
     
     # investments.buy(selected_stock, lookupDate, 5)
     # investments.sell(selected_stock, lookupDate + datetime.timedelta(days=1), 5)
@@ -92,7 +105,7 @@ def calculator():
     limit = startDate + datetime.timedelta(days=365)
     if limit >= date.today():
         limit = date.today()
-    endDate = st.date_input("Enter End Date", value = date.today(), min_value = startDate, max_value = limit) 
+    endDate = st.date_input("Enter End Date", value = date.today(), min_value = startDate + datetime.timedelta(days=1), max_value = limit) 
     # if (endDate - startDate).days <= 365:
         # mainStock = Stock(selected_stock, start_date=startDate, end_date=endDate)
         # mainStock.calculateCapitalGain()
@@ -137,7 +150,7 @@ def stockLookUp():
     print(timePeriod)
 
     mainStock = Stock(selected_stock, timePeriod)
-    sD = mainStock.getStockData()
+    # sD = mainStock.getStockData()
 
     mainStock.graph()
     st.subheader("Background Info")
@@ -147,7 +160,7 @@ def stockLookUp():
 
 def home():
     st.subheader("Welcome")
-    st.write("With the recent developments over the past year, the stock market has been making headlines quite frequently. It can be easy to dismiss the stock market as dangerous and requiring plenty of prior knowledge. While it may be some truth to that, it doesn't have to be so foriegn.")
+    st.write("With the recent developments over the past year, the stock market has been making headlines quite frequently. It can be easy to dismiss the stock market as dangerous and requiring plenty of prior knowledge. While there may be some truth to that, it doesn't have to be so foriegn.")
 
     st.subheader("Our Goal")
     st.write("We have created tools to help individuals who are new to the stock market and would love to learn more. All while taking none of the finanical risk. The Stock Look Up allows you to see the past year of a company's trading history. Taking a closer look at the graph will show the daily open, close, high, and low.")

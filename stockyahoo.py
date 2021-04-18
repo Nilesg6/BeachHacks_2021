@@ -24,44 +24,65 @@ class Trade():
         self.wallet = wallet
         self.portfolio = {}
         self.stockData = []
+        self.worth = 0
+        self.initial = wallet
 
     def buy(self, tickers, date, shares):
         # buyStock = Stock(ticker)
         # print(date)
         # data = buyStock.load_data_range(startDate= date - datetime.timedelta(days=1), endDate= date)
         data = yf.download(tickers, start = date)
-        self.stockData = data
-        # print(data)
+        # self.stockData = data
+        print(data)
         if(len(data['Close']) > 0):
             purchase = 0
-            c = 0
-            for i in tickers: #, range(len(shares)):
-                purchase += float(data['Close'][i][0]) * float(shares[c])
-                c +=1
-            print(purchase)
+            for i, j in zip(tickers, shares):
+                purchase += float(data['Close'][i][0]) * float(j)
+            print(" pur", purchase)
             # purchase = sharePrice * float(shares
             if self.confirmBuy(purchase):
-                # self.updatePortfolio(tickers, shares)
-                self.wallet -= purchase
-                print(self.portfolio)
+                self.updatePortfolio(tickers, shares)
+                self.wallet -= round(purchase, 2)
+                self.worth += round(purchase, 2)
+                print(" por", self.portfolio)
+                print(" wal", self.wallet)
+                print(" wor", self.worth)
+                st.subheader("Purchase Complete!")
+                st.write("Wallet =", self.wallet)
+                st.write("Portfolio Worth =", self.worth)
+                return self.portfolio
+            st.write("Insufficient Funds")
 
         
     def sell(self, tickers, date, shares):
-        data = yf.download(tickers, start = date)
-        self.stockData = data
-        # print(data)
+        print(" tic", tickers)
+        # if len(tickers) == 0:
+        #     st.write("Inadequate Information")
+        #     return
+        data = yf.download(tickers, end = date)
+        # self.stockData = data
+        # self.worth = self.getPortfolioWorth()
+        print(self.stockData)
+        # print(" wal", self.wallet)
+        print(" wor", self.worth)
+        print(" por", self.portfolio)
+
         if(len(data['Close']) > 0):
-            sold = 0
-            c = 0
-            for i in tickers: #, range(len(shares)):
-                sold += float(data['Close'][i][0]) * float(shares[c])
-                c +=1
-            # print(sold)
-            # purchase = sharePrice * float(shares
-            if self.confirmSell(sold):
+            sellPrice = 0
+            for i, j in zip(tickers, shares):
+                sellPrice += float(data['Close'][i][len(data['Close']) - 1]) * float(j)
+            print(" sel", sellPrice)
+            if self.confirmSell(sellPrice):
                 # self.updatePortfolio(tickers, shares)
-                self.wallet += sold
+                self.wallet += round(sellPrice, 2)
+                self.worth =  round(self.wallet - float(self.initial), 2)
+                print(" wal", self.wallet)
+                print(" wer", self.worth)
                 print(self.portfolio)
+                st.subheader("Trade Complete!")
+                st.write("Wallet =", round(self.wallet, 2))
+                st.write("Capital Gain =", self.worth)
+
 
         # data = yf.download(ticker, start = date)
         # if(len(data['Close']) > 0):
@@ -76,24 +97,24 @@ class Trade():
             return True
         return False
          
-    def confirmSell(self, ticker, shares):
-        if(self.portfolio[ticker] >= shares):
+    def confirmSell(self, sellPrice):
+        if(self.worth >= sellPrice):
            return True	
         return False
 
-    def updatePortfolio(self, ticker, share):
-        if(ticker not in self.portfolio.keys()):
-            self.portfolio[ticker] = 0
-        self.portfolio[ticker] += share
+    def updatePortfolio(self, tickers, shares):
+        # if(ticker not in self.portfolio.keys()):
+        #     self.portfolio[ticker] = 0
+        for i, j in zip(tickers, shares):
+            self.portfolio[i] = int(j)
         # print(self.portfolio)
-        return list(self.portfolio.keys())
+        # return list(self.portfolio.keys())
 
-
-    # def getPortfolioWorth(date):
-    #     sum = 0
-    #     for loop
-    #         sum += ticker.date of tuesday price * shares
-    #     return sum
+    # def getPortfolioWorth(self):
+    #     for i, j in self.portfolio.items():
+    #         self.worth += self.stockData['Close'][i][len(self.stockData['Close']) - 1] * float(j)
+    #         print(" sum", self.worth)
+    #     return round(self.worth, 2)
 
     def getWallet(self):
         return self.wallet
