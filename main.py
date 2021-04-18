@@ -10,7 +10,7 @@ from stockyahoo import Trade
 
 def run():
     options = ["Home","Stock Look Up", "Calculator", "Paper Trade"]
-    choice = st.sidebar.selectbox("Choose Page", options, 3)
+    choice = st.sidebar.selectbox("Choose Page", options, 0)
     if choice == options[0]:
         home()
     if choice == options[1]:
@@ -95,7 +95,7 @@ def calculator():
     st.title('Calculator')
 
     selected_stock = st.text_input("Enter ticker:", "GME").upper()
-    share_amount = st.text_input("Enter share amount:", 0)
+    share_amount = st.text_input("Enter share amount:", 1)
     startDate = st.date_input("Enter Start Date", value = date.today() - datetime.timedelta(days=1), max_value = date.today() - datetime.timedelta(days=1))
     limit = startDate + datetime.timedelta(days=365)
     if limit >= date.today():
