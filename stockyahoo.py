@@ -47,22 +47,23 @@ class Stock():
         data.reset_index(inplace=True)
         return data
 
-    def load_data_range(self, startDate):#, endDate):
+    def load_data_range(self, startDate, endDate):
         # if(startDate == endDate):
         #     data = yf.download(, start = startDate, end = endDate, interval='15m')
         # else:
         if(self.tickerString!= ""):
-            data = yf.download(self.tickerString, start = startDate)#, end = endDate)
+            data = yf.download(self.tickerString, start = startDate, end = endDate)
         # print(data[0])
         # data = ticker.history("1d", "1m")
-        data.reset_index(inplace=True)
-        return data
+            data.reset_index(inplace=True)
+            return data
         
     def calculateCapitalGain(self,shares): # startDate, endDate):
-        startData = self.load_data_range(self.startDate)#, self.startDate)
-        endData = self.load_data_range(self.endDate)#, self.endDate)
-        startPrice = startData['Open'][0]
-        endPrice = startData['Close'][len(startData['Close']) - 1]
+        # startData = self.load_data_range(self.startDate, self.startDate)
+        # endData = self.load_data_range(self.endDate, self.endDate)
+        rangeData = self.load_data_range(self.startDate, self.endDate)
+        startPrice = rangeData['Open'][0]
+        endPrice = rangeData['Close'][len(rangeData['Close']) - 1]
         print(startPrice , endPrice)
         return shares * (endPrice - startPrice)
 
