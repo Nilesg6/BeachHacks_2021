@@ -9,6 +9,7 @@ import pandas as pd
 # from fbprophet.plot import plot_plotly
 from plotly import graph_objs as go
 from stockyahoo import Stock
+from stockyahoo import Trade
 
 def run():
     options = ["Stock Look Up", "Calculator", "Paper Trade"]
@@ -23,42 +24,51 @@ def run():
 def paperTrade():
     st.title('Paper Trade')
 
-    wallet = 0
-    st.text_input("Enter wallet amount ($):", 0)
-
-    portfolio = [['2020-09-01', 'GME', 1000], ['2021-04-01', 'GME', 100]]
-    portfolio.append(['XXXX-XX-XX', 'GME', 10])
+    # wallet = 0
+    wallet = st.text_input("Enter wallet amount ($):", 1000)
+    investments = Trade(wallet)
 
     selected_stock = st.text_input("Enter ticker:", "GME").upper()
+    
     lookupDate = st.date_input("Enter Buy Date", value = date.today(), max_value = date.today())
+
+    
+    investments.buy(selected_stock, lookupDate, 5)
+    investments.sell(selected_stock, lookupDate + datetime.timedelta(days=1), 5)
+    st.write(investments.getWallet())
+
+    # portfolio = [['2020-09-01', 'GME', 1000], ['2021-04-01', 'GME', 100]]
+    # portfolio.append(['XXXX-XX-XX', 'GME', 10])
+
+    
     # lookupDate = st.date_input("Enter Sell Date", value = date.today(), max_value = date.today())
     
-    # if st.button("Open") == True:
-    #     price = dummy_stock.getOpenPrice()
-    # elif st.button("Close") == True:
+    # # if st.button("Open") == True:
+    # #     price = dummy_stock.getOpenPrice()
+    # # elif st.button("Close") == True:
 
 
-    dummy_stock = Stock(selected_stock, endDate=lookupDate)
-    stock1 = Stock(selected_stock, endDate=lookupDate)
-    stock2 = Stock(selected_stock, endDate=lookupDate)
+    # dummy_stock = Stock(selected_stock, endDate=lookupDate)
+    # stock1 = Stock(selected_stock, endDate=lookupDate)
+    # stock2 = Stock(selected_stock, endDate=lookupDate)
 
-    price = dummy_stock.getClosePrice()
-    stage = price * shares
+    # price = dummy_stock.getClosePrice()
+    # stage = price * shares
 
-    trader = Trade()
+    # trader = Trade()
 
-    if stage <= wallet:
-        portfolio.add(trader.buy(stock1))
-        portfolio.remove(trader.sell(stock1))
+    # if stage <= wallet:
+    #     portfolio.add(trader.buy(stock1))
+    #     portfolio.remove(trader.sell(stock1))
 
 
-    st.header("Portfolio")
+    # st.header("Portfolio")
 
-    st.dataframe(pd.DataFrame(portfolio, columns={
-        "date": portfolio[:0],
-        "ticker": portfolio[:1],
-        "shares": portfolio[:2]
-    }))
+    # st.dataframe(pd.DataFrame(portfolio, columns={
+    #     "date": portfolio[:0],
+    #     "ticker": portfolio[:1],
+    #     "shares": portfolio[:2]
+    # }))
 
 
 def calculator():

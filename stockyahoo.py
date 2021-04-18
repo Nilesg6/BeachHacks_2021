@@ -18,7 +18,60 @@ from plotly import graph_objs as go
 #sy
 #ticker
 #data
+class Trade():
 
+    def __init__(self, wallet = 1000):
+        self.wallet = int(wallet)
+        self.portfolio = {}
+
+    def buy(self, ticker, date, shares ):
+        # buyStock = Stock(ticker)
+        # print(date)
+        # data = buyStock.load_data_range(startDate= date - datetime.timedelta(days=1), endDate= date)
+        data = yf.download(ticker, start = date)
+        
+        if(len(data['Close']) > 0):
+            sharePrice = data['Close'][0]
+            purchase = sharePrice * shares
+            if self.confirmBuy(purchase):
+                self.updatePortfolio(ticker, shares)
+                self.wallet -= purchase
+                # print(self.portfolio)
+
+        
+    def sell(self, ticker, date, shares):
+        data = yf.download(ticker, start = date)
+        if(len(data['Close']) > 0):
+            sharePrice = data['Close'][0]
+            sold = sharePrice * shares
+            if self.confirmSell(ticker, shares):
+                self.updatePortfolio(ticker, -1*shares)
+                self.wallet += sold
+        
+    def confirmBuy(self, purchase):
+        if self.wallet >= purchase:  #purchase = shares * price > 0
+            return True
+        return False
+         
+    def confirmSell(self, ticker, shares):
+        if(self.portfolio[ticker] >= shares):
+           return True	
+        return False
+
+    def updatePortfolio(self, ticker, share):
+        if(ticker not in self.portfolio.keys()):
+            self.portfolio[ticker] = 0
+        self.portfolio[ticker] += share
+
+
+    # def getPortfolioWorth(date):
+    #     sum = 0
+    #     for loop
+    #         sum += ticker.date of tuesday price * shares
+    #     return sum
+
+    def getWallet(self):
+        return self.wallet
 
 class Stock():
 
@@ -159,3 +212,5 @@ class Graph():
 #         inter='1mo'
 #         data = load_data(ticker, inter)
 #         plot_raw_data(data)
+
+
