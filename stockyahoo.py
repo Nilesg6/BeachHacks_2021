@@ -23,19 +23,23 @@ class Trade():
     def __init__(self, wallet = 1000):
         self.wallet = wallet
         self.portfolio = {}
+        self.stockData = []
 
     def buy(self, tickers, date, shares):
         # buyStock = Stock(ticker)
         # print(date)
         # data = buyStock.load_data_range(startDate= date - datetime.timedelta(days=1), endDate= date)
         data = yf.download(tickers, start = date)
-        print(data)
+        self.stockData = data
+        # print(data)
         if(len(data['Close']) > 0):
-            sharePrice = 0
+            purchase = 0
+            c = 0
             for i in tickers: #, range(len(shares)):
-                sharePrice += data['Close'][i][0]
-            print(sharePrice)
-            purchase = sharePrice * shares
+                purchase += float(data['Close'][i][0]) * float(shares[c])
+                c +=1
+            print(purchase)
+            # purchase = sharePrice * float(shares
             if self.confirmBuy(purchase):
                 # self.updatePortfolio(tickers, shares)
                 self.wallet -= purchase
@@ -77,6 +81,14 @@ class Trade():
 
     def getWallet(self):
         return self.wallet
+
+    def graph(self):
+        #, date_col = stockData['Date'], open_col = stockData['Open']):
+        # args = [date_col, open_col]
+        # g = 0
+        # del g
+        g = Graph()
+        g.plot_raw_data(self.stockData)
 
 class Stock():
 
@@ -147,6 +159,9 @@ class Stock():
         # del g
         g = Graph()
         g.plot_raw_data(self.stockData)
+
+    def background(self):
+        return(self.ticker.info['longBusinessSummary'])
 
 
 #seperate

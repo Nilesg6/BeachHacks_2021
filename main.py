@@ -41,10 +41,11 @@ def paperTrade():
     lookupDate = st.date_input("Enter Buy Date", value = date.today(), max_value = date.today())
     if st.button("Buy") == True:
         investments.buy(list(portfolio.keys()), lookupDate, list(portfolio.values()))
+    investments.graph()
     
     # investments.buy(selected_stock, lookupDate, 5)
     # investments.sell(selected_stock, lookupDate + datetime.timedelta(days=1), 5)
-    st.write(investments.getWallet())
+    # st.write(investments.getWallet())
 
     # portfolio = [['2020-09-01', 'GME', 1000], ['2021-04-01', 'GME', 100]]
     # portfolio.append(['XXXX-XX-XX', 'GME', 10])
@@ -137,6 +138,9 @@ def stockLookUp():
     sD = mainStock.getStockData()
 
     mainStock.graph()
+    st.subheader("Background Info")
+    mainStock.background()  
+    st.write(mainStock.background())
 
 
 run()
