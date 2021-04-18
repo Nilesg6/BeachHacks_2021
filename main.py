@@ -14,13 +14,15 @@ from stockyahoo import Trade
 # wallet = 1000
 
 def run():
-    options = ["Stock Look Up", "Calculator", "Paper Trade"]
-    choice = st.sidebar.selectbox("choose", options, 2)
+    options = ["Home","Stock Look Up", "Calculator", "Paper Trade"]
+    choice = st.sidebar.selectbox("Choose Page", options, 0)
     if choice == options[0]:
-        stockLookUp()
+        home()
     if choice == options[1]:
-        calculator()
+        stockLookUp()
     if choice == options[2]:
+        calculator()
+    if choice == options[3]:
         paperTrade()
 
 def paperTrade():
@@ -141,6 +143,16 @@ def stockLookUp():
     st.subheader("Background Info")
     mainStock.background()  
     st.write(mainStock.background())
+
+
+def home():
+    st.subheader("Welcome")
+    st.write("With the recent developments over the past year, the stock market has been making headlines quite frequently. It can be easy to dismiss the stock market as dangerous and requiring plenty of prior knowledge. While it may be some truth to that, it doesn't have to be so foriegn.")
+
+    st.subheader("Our Goal")
+    st.write("We have created tools to help individuals who are new to the stock market and would love to learn more. All while taking none of the finanical risk. The Stock Look Up allows you to see the past year of a company's trading history. Taking a closer look at the graph will show the daily open, close, high, and low.")
+    st.write("The calculator allows you to visualize the market growth of a company over a time period. And with using real numbers, we can estimate how many shares would have changed in value.")
+
 
 
 run()
