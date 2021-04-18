@@ -1,3 +1,8 @@
+# Paper Trade
+## BeachHacks 2021
+#### Authors
+James Austin Jr and Nilesh Gupta
+
 We have created tools to help individuals who are new to the stock market and would love to learn more. All while taking none of the finanical risk. 
 
 The Stock Look Up allows you to see the past year of a company's trading history. Taking a closer look at the graph will show the daily open, close, high, and low.
