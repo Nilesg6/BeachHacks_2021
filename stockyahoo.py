@@ -47,13 +47,29 @@ class Trade():
 
         
     def sell(self, ticker, date, shares):
-        data = yf.download(ticker, start = date)
+        data = yf.download(tickers, start = date)
+        self.stockData = data
+        # print(data)
         if(len(data['Close']) > 0):
-            sharePrice = data['Close'][0]
-            sold = sharePrice * shares
-            if self.confirmSell(ticker, shares):
-                self.updatePortfolio(ticker, -1*shares)
+            sold = 0
+            c = 0
+            for i in tickers: #, range(len(shares)):
+                sold += float(data['Close'][i][0]) * float(shares[c])
+                c +=1
+            # print(sold)
+            # purchase = sharePrice * float(shares
+            if self.confirmSell(sold):
+                # self.updatePortfolio(tickers, shares)
                 self.wallet += sold
+                print(self.portfolio)
+
+        # data = yf.download(ticker, start = date)
+        # if(len(data['Close']) > 0):
+        #     sharePrice = data['Close'][0]
+        #     sold = sharePrice * shares
+        #     if self.confirmSell(ticker, shares):
+        #         self.updatePortfolio(ticker, -1*shares)
+        #         self.wallet += sold
         
     def confirmBuy(self, purchase):
         if self.wallet >= purchase:  #purchase = shares * price > 0
