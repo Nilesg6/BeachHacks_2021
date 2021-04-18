@@ -157,7 +157,7 @@ def stockLookUp():
     mainStock = Stock(selected_stock, timePeriod)
     # sD = mainStock.getStockData()
 
-    st.subheader("OHLC Graph:\nThe OHLC graph displays the high and low price of stock in a period of time. Each line represents the statistics for each 15 minutes for 1 day tracking or individual day in the period of time.")
+    st.subheader("OHLC Graph:\nThe OHLC graph displays the high, low, closing, and opening prices of a stock in a period of time. Each line represents the statistics for each 15 minutes for 1 day tracking or individual day in the period of time.")
     mainStock.graph()
     st.subheader("Background Info")
     mainStock.background()  
