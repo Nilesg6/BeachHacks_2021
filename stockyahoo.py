@@ -21,22 +21,25 @@ from plotly import graph_objs as go
 class Trade():
 
     def __init__(self, wallet = 1000):
-        self.wallet = int(wallet)
+        self.wallet = wallet
         self.portfolio = {}
 
-    def buy(self, ticker, date, shares ):
+    def buy(self, tickers, date, shares):
         # buyStock = Stock(ticker)
         # print(date)
         # data = buyStock.load_data_range(startDate= date - datetime.timedelta(days=1), endDate= date)
-        data = yf.download(ticker, start = date)
-        
+        data = yf.download(tickers, start = date)
+        print(data)
         if(len(data['Close']) > 0):
-            sharePrice = data['Close'][0]
+            sharePrice = 0
+            for i in tickers: #, range(len(shares)):
+                sharePrice += data['Close'][i][0]
+            print(sharePrice)
             purchase = sharePrice * shares
             if self.confirmBuy(purchase):
-                self.updatePortfolio(ticker, shares)
+                # self.updatePortfolio(tickers, shares)
                 self.wallet -= purchase
-                # print(self.portfolio)
+                print(self.portfolio)
 
         
     def sell(self, ticker, date, shares):
@@ -62,6 +65,8 @@ class Trade():
         if(ticker not in self.portfolio.keys()):
             self.portfolio[ticker] = 0
         self.portfolio[ticker] += share
+        # print(self.portfolio)
+        return list(self.portfolio.keys())
 
 
     # def getPortfolioWorth(date):

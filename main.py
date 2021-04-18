@@ -11,6 +11,8 @@ from plotly import graph_objs as go
 from stockyahoo import Stock
 from stockyahoo import Trade
 
+# wallet = 1000
+
 def run():
     options = ["Stock Look Up", "Calculator", "Paper Trade"]
     choice = st.sidebar.selectbox("choose", options, 2)
@@ -25,16 +27,23 @@ def paperTrade():
     st.title('Paper Trade')
 
     # wallet = 0
-    wallet = st.text_input("Enter wallet amount ($):", 1000)
-    investments = Trade(wallet)
-
-    selected_stock = st.text_input("Enter ticker:", "GME").upper()
-    
+    # wallet = st.text_input("Enter wallet amount ($):", 1000)
+    investments = Trade()
+    stock_amount = int(st.text_input("Enter amount of stocks:", 3))
+    portfolio = {}
+    while stock_amount:
+        stock_amount-=1
+        select_stock = st.text_input("Enter ticker:", key=stock_amount).upper()
+        share_amount = st.text_input("Enter share amount:", key=stock_amount)
+        portfolio[select_stock] = share_amount
+        # stock_list = investments.updatePortfolio(st.text_input("Enter ticker:", key=stock_amount).upper(), 2)
+    print(portfolio)
     lookupDate = st.date_input("Enter Buy Date", value = date.today(), max_value = date.today())
-
+    if st.button("Buy") == True:
+        investments.buy(list(portfolio.keys()), lookupDate, list(portfolio.values()))
     
-    investments.buy(selected_stock, lookupDate, 5)
-    investments.sell(selected_stock, lookupDate + datetime.timedelta(days=1), 5)
+    # investments.buy(selected_stock, lookupDate, 5)
+    # investments.sell(selected_stock, lookupDate + datetime.timedelta(days=1), 5)
     st.write(investments.getWallet())
 
     # portfolio = [['2020-09-01', 'GME', 1000], ['2021-04-01', 'GME', 100]]
