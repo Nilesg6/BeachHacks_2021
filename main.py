@@ -22,11 +22,11 @@ def calculator():
 
     selected_stock = st.text_input("Enter ticker:", "GME").upper()
     share_amount = st.text_input("Enter share amount:", 1)
-    startDate = st.date_input("Enter Start Date", max_value = date.today())
+    startDate = st.date_input("Enter Start Date", value = date.today() - datetime.timedelta(days=1), max_value = date.today() - datetime.timedelta(days=1))
     limit = startDate + datetime.timedelta(days=365)
     if limit >= date.today():
         limit = date.today()
-    endDate = st.date_input("Enter End Date", min_value = startDate, max_value = limit) 
+    endDate = st.date_input("Enter End Date", value = date.today(), min_value = startDate, max_value = limit) 
     # if (endDate - startDate).days <= 365:
         # mainStock = Stock(selected_stock, start_date=startDate, end_date=endDate)
         # mainStock.calculateCapitalGain()

@@ -53,9 +53,9 @@ class Stock():
         # else:
         if(self.tickerString!= ""):
             inter = '1d'
-            if(startDate == endDate):
+            if((endDate - startDate).days <= 3):
                 inter = '15m'
-                data = self.ticker.history('1d', interval = inter)
+                data = self.ticker.history(period='1d', interval = inter, start=startDate, end=endDate)
             else:
                 data = yf.download(self.tickerString, start = startDate, end = endDate, interval = inter)
             self.stockData = data
