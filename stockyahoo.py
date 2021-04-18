@@ -22,25 +22,51 @@ from plotly import graph_objs as go
 
 class Stock():
 
-    ticker = []
+    tickerString = ""
+    ticker = ""
     stockData = []
     period = ""
+    startDate = 0
+    endDate = 0
 
-    def __init__(self, selected_stock, period):
+    def __init__(self, selected_stock, period = '1y', startDate = 0, endDate = 0):
         self.ticker = yf.Ticker(selected_stock)
+        self.tickerString = selected_stock
         self.period = period
-        self.stockData = self.load_data(self.ticker, self.period )
+        self.stockData = self.load_data(self.period )
+        self.startDate = startDate
+        self.endDate = endDate
         
 
-    def load_data(self, ticker, period, interval = '1d'):
+    def load_data(self, period, interval = '1d'):
         if(period == '1d'):
             interval = '15m'
-        data = ticker.history(period, interval)
+        data = self.ticker.history(period, interval)
+        # print(data[0])
+        # data = ticker.history("1d", "1m")
+        data.reset_index(inplace=True)
+        return data
+
+    def load_data_range(self, startDate):#, endDate):
+        # if(startDate == endDate):
+        #     data = yf.download(, start = startDate, end = endDate, interval='15m')
+        # else:
+        if(self.tickerString!= ""):
+            data = yf.download(self.tickerString, start = startDate)#, end = endDate)
         # print(data[0])
         # data = ticker.history("1d", "1m")
         data.reset_index(inplace=True)
         return data
         
+    def calculateCapitalGain(self,shares): # startDate, endDate):
+        startData = self.load_data_range(self.startDate)#, self.startDate)
+        endData = self.load_data_range(self.endDate)#, self.endDate)
+        startPrice = startData['Open'][0]
+        endPrice = startData['Close'][len(startData['Close']) - 1]
+        print(startPrice , endPrice)
+        return shares * (endPrice - startPrice)
+
+
     def getStockData(self):
         return self.stockData
 
