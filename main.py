@@ -2,16 +2,11 @@ import streamlit as st
 # from datetime import date
 import datetime
 from datetime import date
-# import wikipedia
 import yfinance as yf
 import pandas as pd
-# from fbprophet import Prophet
-# from fbprophet.plot import plot_plotly
 from plotly import graph_objs as go
 from stockyahoo import Stock
 from stockyahoo import Trade
-
-# wallet = 1000
 
 def run():
     options = ["Home","Stock Look Up", "Calculator", "Paper Trade"]
@@ -163,9 +158,10 @@ def home():
     st.write("With the recent developments over the past year, the stock market has been making headlines quite frequently. It can be easy to dismiss the stock market as dangerous and requiring plenty of prior knowledge. While there may be some truth to that, it doesn't have to be so foriegn.")
 
     st.subheader("Our Goal")
-    st.write("We have created tools to help individuals who are new to the stock market and would love to learn more. All while taking none of the finanical risk. The Stock Look Up allows you to see the past year of a company's trading history. Taking a closer look at the graph will show the daily open, close, high, and low.")
+    st.write("We have created tools to help individuals who are new to the stock market and would love to learn more. All while taking none of the finanical risk.") 
+    st.write("The Stock Look Up allows you to see the past year of a company's trading history. Taking a closer look at the graph will show the daily open, close, high, and low.")
     st.write("The calculator allows you to visualize the market growth of a company over a time period. And with using real numbers, we can estimate how many shares would have changed in value.")
-
+    st.write("Paper Trade allows you to simulate holding a portfolio of mulitiple different companies. You can choose how many stocks and how many shares you wish to purchase based off your wallet. Then after choosing a buy and sell date you can see how your portfolio preformed.")
 
 
 run()
