@@ -53,6 +53,7 @@ class Stock():
         # else:
         if(self.tickerString!= ""):
             data = yf.download(self.tickerString, start = startDate, end = endDate)
+            self.stockData = data
         # print(data[0])
         # data = ticker.history("1d", "1m")
             data.reset_index(inplace=True)
@@ -65,8 +66,8 @@ class Stock():
         startPrice = rangeData['Open'][0]
         endPrice = rangeData['Close'][len(rangeData['Close']) - 1]
         print(startPrice , endPrice)
-        return shares * (endPrice - startPrice)
-
+        total = round(float(shares) * (endPrice - startPrice), 2)
+        return total
 
     def getStockData(self):
         return self.stockData

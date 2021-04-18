@@ -21,7 +21,7 @@ def calculator():
     st.title('Calculator')
 
     selected_stock = st.text_input("Enter ticker:", "GME").upper()
-    share_amount = st.text_input("Enter share amount:", 0)
+    share_amount = st.text_input("Enter share amount:", 1)
     startDate = st.date_input("Enter Start Date", max_value = date.today())
     endDate = st.date_input("Enter End Date", min_value = startDate, max_value = (startDate + datetime.timedelta(days=365))) 
     # if (endDate - startDate).days <= 365:
@@ -40,14 +40,15 @@ def calculator():
     st.markdown("""
                 <style>
                 .font-size {
-                    font-size:3vw;
+                    font-size:2vw;
                 }
                 </style>
                 """, unsafe_allow_html=True)
 
     gain = Stock(selected_stock, startDate=startDate, endDate=endDate)
     calc = gain.calculateCapitalGain(share_amount)
-    st.write('<p class="font-size">Capital Gain for ', share_amount, 'shares in ', selected_stock, ':', calc, '</p>', unsafe_allow_html=True)
+    st.write('<p class="font-size">Capital Gain for ', share_amount, 'shares in ', selected_stock, ': $', str(calc), '</p>', unsafe_allow_html=True)
+    gain.graph()
     # st.text()
 
     # mainStock = Stock(selected_stock, timePeriod)
