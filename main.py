@@ -3,7 +3,6 @@ import streamlit as st
 import datetime
 from datetime import date
 import yfinance as yf
-import pandas as pd
 from plotly import graph_objs as go
 from stockyahoo import Stock
 from stockyahoo import Trade
@@ -177,6 +176,7 @@ def home():
 
 
 run()
+
 
 # if(sD != []):
 # print(sD)
