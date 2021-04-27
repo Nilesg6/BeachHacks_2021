@@ -1,4 +1,4 @@
-# Paper Trade
+# Paper Trader
 ## BeachHacks 2021
 #### Authors
 James Austin Jr and Nilesh Gupta
